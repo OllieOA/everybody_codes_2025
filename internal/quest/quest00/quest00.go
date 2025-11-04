@@ -52,9 +52,13 @@ func readFile(name string) (string, error) {
 	return string(content), nil
 }
 
-func getInput(ctx questregistry.Context) (string, error) {
+func getInput(ctx questregistry.Context, part int) (string, error) {
+	// This function will attempt to read input files based on the context and part number
+	// with fallbacks to non-numbered files if not found.
 	var content string
 	var err error
+
+	var targetFileType string
 
 	_, currentFile, _, ok := runtime.Caller(0)
 	if !ok {
@@ -63,77 +67,107 @@ func getInput(ctx questregistry.Context) (string, error) {
 	parentDir := filepath.Dir(currentFile)
 
 	if ctx.Sample {
-		fmt.Printf("Running Quest %02d with sample input.\n", questNumber)
-		content, err = readFile(filepath.Join(parentDir, "sample.txt"))
-		if err != nil {
-			return "", fmt.Errorf("failed to read sample file: %w", err)
-		}
-
+		targetFileType = "sample"
 	} else {
-		fmt.Printf("Running Quest %02d with real input.\n", questNumber)
-		content, err = readFile(filepath.Join(parentDir, "input.txt"))
-		if err != nil {
-			return "", fmt.Errorf("failed to read input file: %w", err)
-		}
+		targetFileType = "input"
 	}
+
+	partFile := targetFileType + strconv.Itoa(part) + ".txt"
+	partFilePath := filepath.Join(parentDir, partFile)
+
+	content, err = readFile(partFilePath)
+	if err == nil {
+		return content, nil
+	}
+
+	fallbackFile := targetFileType + ".txt"
+	fallbackFilePath := filepath.Join(parentDir, fallbackFile)
+
+	content, err = readFile(fallbackFilePath)
+	if err != nil {
+		return "", fmt.Errorf("failed to read input files for part %d: %w", part, err)
+	}
+
 	return content, nil
 }
 
-func parseContent(content string) (string, error) {
-	// Placeholder for parsing logic
-	// Used in the case where there is a shared transformation needed
-	return content, nil
+// Shared helper functions
+	func getPotionsRequired(bug string) int {
+		switch bug {
+		case "B":
+			return 1
+		case "C":
+			return 3
+		case "D":
+			return 5
+		default:
+			return 0
+	}
 }
 
 // Logical answers to the parts
 
-func part1(content string) int {
-	_ = content // placeholder to avoid unused variable error
+func part1(context questregistry.Context) int {
+	part := 1
+	content, err := getInput(context, part)
+	if err != nil {
+		fmt.Printf("No input for part %d: %s\n", part, err)
+		return 0
+	}
+
+	// Logic below
+
+	_ = content
 	return 0
 }
 
-func part2(content string) int {
-	_ = content // placeholder to avoid unused variable error
+func part2(context questregistry.Context) int {
+	part := 2
+	content, err := getInput(context, part)
+	if err != nil {
+		fmt.Printf("No input for part %d: %s\n", part, err)
+		return 0
+	}
+
+	// Logic below
+
+	_ = content
 	return 0
 }
 
-func part3(content string) int {
-	_ = content // placeholder to avoid unused variable error
+func part3(context questregistry.Context) int {
+	part := 3
+	content, err := getInput(context, part)
+	if err != nil {
+		fmt.Printf("No input for part %d: %s\n", part, err)
+		return 0
+	}
+
+	// Logic below
+
+	_ = content
 	return 0
 }
+
+// Finally, main runner function
 
 func Run(ctx questregistry.Context) error {
-	var content string
-	var err error
 	base_start := time.Now()
 
-	content, err = getInput(ctx)
-	if err != nil {
-		return err
-	}
-
-	io_complete_time := time.Since(base_start)
-	logic_start := time.Now()
-
-	parsed_content, err := parseContent(content)
-	if err != nil {
-		return fmt.Errorf("failed to parse content: %w", err)
-	}
-
-	part1_answer := part1(parsed_content)
-	part1_time := time.Since(logic_start)
+	part1_answer := part1(ctx)
+	part1_time := time.Since(base_start)
 	fmt.Printf("Part 1 answer: %d (computed in %s)\n", part1_answer, part1_time)
 
-	part2_answer := part2(parsed_content)
-	part2_time := time.Since(logic_start) - part1_time
+	part2_answer := part2(ctx)
+	part2_time := time.Since(base_start) - part1_time
 	fmt.Printf("Part 2 answer: %d (computed in %s)\n", part2_answer, part2_time)
 
-	part3_answer := part3(parsed_content)
-	part3_time := time.Since(logic_start) - part1_time - part2_time
+	part3_answer := part3(ctx)
+	part3_time := time.Since(base_start) - part1_time - part2_time
 	fmt.Printf("Part 3 answer: %d (computed in %s)\n", part3_answer, part3_time)
 
 	total_time := time.Since(base_start)
-	fmt.Printf("I/O time: %s, Total time: %s\n", io_complete_time, total_time)
+	fmt.Printf("Total time: %s\n", total_time)
 
 	return nil
 }

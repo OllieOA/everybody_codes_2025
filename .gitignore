@@ -33,3 +33,4 @@ go.work.sum
 
 # Everybody Codes rules
 *input.txt
+*input*.txt
