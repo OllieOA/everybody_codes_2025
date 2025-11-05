@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/OllieOA/everybody_codes_2025/internal/quest_registry"
+	"github.com/OllieOA/everybody_codes_2025/internal/common"
 
 	// each quest package must be imported to register its handler with init()
 	// Uncommented as I complete them
@@ -50,13 +50,13 @@ func main() {
 		os.Exit(2)
 	}
 
-	handler := questregistry.GetHandler(questNumber)
+	handler := common.GetHandler(questNumber)
 	if handler == nil {
 		fmt.Fprintf(os.Stderr, "error: quest %d is not yet implemented\n", questNumber)
 		os.Exit(1)
 	}
 
-	ctx := questregistry.Context{
+	ctx := common.Context{
 		Quest:  questNumber,
 		Sample: sampleFlag,
 	}

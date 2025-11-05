@@ -1,4 +1,4 @@
-package questregistry
+package common
 
 type Context struct {
 	Quest    int
