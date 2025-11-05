@@ -12,7 +12,7 @@ import (
 	// Uncommented as I complete them
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest00"
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest01"
-	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest02"
+	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest02"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest03"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest04"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest05"
@@ -52,7 +52,7 @@ func main() {
 
 	handler := common.GetHandler(questNumber)
 	if handler == nil {
-		fmt.Fprintf(os.Stderr, "error: quest %d is not yet implemented\n", questNumber)
+		fmt.Fprintf(os.Stderr, "error: quest %d is not yet implemented (or you have not imported it in main.go)\n", questNumber)
 		os.Exit(1)
 	}
 
