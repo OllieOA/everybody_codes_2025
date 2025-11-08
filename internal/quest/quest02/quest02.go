@@ -2,7 +2,10 @@ package quest00
 
 import (
 	"fmt"
+	"image"
+	"image/png"
 	"math"
+	"os"
 	"regexp"
 	"strconv"
 	"sync"
@@ -76,6 +79,67 @@ func countEngravedPoints(points map[[2]int]bool) int {
 	return count
 }
 
+func writeMapToImage(points map[[2]int]bool, filename string) error {
+	// image is known to be square so we can just take square root
+	imgSize := int(math.Sqrt(float64(len(points))))
+
+	minX := 10000000
+	minY := 10000000
+
+	maxX := -10000000
+	maxY := -10000000
+
+
+	for point := range points {
+		if point[0] < minX {
+			minX = point[0]
+		}
+		if point[1] < minY {
+			minY = point[1]
+		}
+		if point[0] > maxX {
+			maxX = point[0]
+		}
+		if point[1] > maxY {
+			maxY = point[1]
+		}
+	}
+
+	img := image.NewRGBA(image.Rect(0, 0, imgSize, imgSize))
+
+	// Iterate over points and write the pixels
+	for point, isEngraved := range points {
+		// We need to normalize the coordinates to start from (0,0)
+		normX := point[0] - minX
+		normY := point[1] - minY
+
+		// Scale to image size
+		imgX := int(float64(normX) / float64(maxX-minX) * float64(imgSize-1))
+		imgY := int(float64(normY) / float64(maxY-minY) * float64(imgSize-1))
+
+		if isEngraved {
+			img.Set(imgX, imgY, image.White)
+		} else {
+			img.Set(imgX, imgY, image.Black)
+		}
+	}
+
+	// Save the image to file
+	outFile, err := os.Create("visualisations/" + filename)
+	if err != nil {
+		return fmt.Errorf("failed to create image file: %w", err)
+	}
+	defer outFile.Close()
+
+	err = png.Encode(outFile, img)
+	if err != nil {
+		return fmt.Errorf("failed to encode image to PNG: %w", err)
+	}
+	return nil
+}
+	
+
+
 // Logical answers to the parts
 
 func part1(context common.Context) string {
@@ -134,6 +198,12 @@ func part2(context common.Context) int {
 	}
 
 	count := countEngravedPoints(coords)
+
+	// Optionally write the map to an image for visualization
+	err = writeMapToImage(coords, "quest02_part2_map.png")
+	if err != nil {
+		fmt.Printf("Error writing map to image: %s\n", err)
+	}
 	return count
 }
 
@@ -182,6 +252,12 @@ func part3(context common.Context) int {
 	wg.Wait() // This blocks until all goroutines have called wg.Done(). Basically it just blocks the main thread
 
 	count := countEngravedPoints(coords)
+
+	// Optionally write the map to an image for visualization
+	err = writeMapToImage(coords, "quest02_part3_map.png")
+	if err != nil {
+		fmt.Printf("Error writing map to image: %s\n", err)
+	}
 	return count
 }
 
