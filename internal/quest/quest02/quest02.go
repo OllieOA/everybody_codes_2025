@@ -1,4 +1,4 @@
-package quest00
+package quest02
 
 import (
 	"fmt"

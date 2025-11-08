@@ -14,7 +14,7 @@ import (
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest01"
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest02"
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest03"
-	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest04"
+	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest04"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest05"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest06"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest07"
