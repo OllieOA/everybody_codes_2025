@@ -34,7 +34,7 @@ func parseInput(content string) (int, []int) {
 	identifier, _ := strconv.Atoi(idAndSequence[0])
 	sequenceStr := idAndSequence[1]
 
-	sequence, _ := common.ParseDelimtedList(sequenceStr, strconv.Atoi, ",")
+	sequence, _ := common.ParseDelimitedList(sequenceStr, strconv.Atoi, ",")
 
 	return identifier, sequence
 }

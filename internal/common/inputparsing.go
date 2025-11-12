@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func ParseDelimtedList[T any](content string, parseMethod func(string) (T, error), delimiter string) ([]T, error) {
+func ParseDelimitedList[T any](content string, parseMethod func(string) (T, error), delimiter string) ([]T, error) {
 	if delimiter == "" {
 		delimiter = ","
 	}

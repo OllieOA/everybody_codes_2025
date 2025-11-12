@@ -76,7 +76,7 @@ func part1(context common.Context) int {
 	firstTurns := 2025.0
 
 	// Logic below
-	gearTeeth, _ := common.ParseDelimtedList(content, strconv.Atoi, "\n")
+	gearTeeth, _ := common.ParseDelimitedList(content, strconv.Atoi, "\n")
 	gearRatio := getGearRatio(gearTeeth)
 
 	return int(firstTurns * gearRatio)
@@ -91,7 +91,7 @@ func part2(context common.Context) int {
 	}
 
 	// Logic below
-	gearTeeth, _ := common.ParseDelimtedList(content, strconv.Atoi, "\n")
+	gearTeeth, _ := common.ParseDelimitedList(content, strconv.Atoi, "\n")
 	gearRatio := getGearRatio(gearTeeth)
 
 	lastTurns := 10000000000000.0

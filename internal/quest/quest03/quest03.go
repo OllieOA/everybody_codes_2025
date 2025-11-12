@@ -55,7 +55,7 @@ func part1(context common.Context) int {
 
 	// Logic below
 	// crateSizes := getCrateSizes(content)
-	crateSizes, _ := common.ParseDelimtedList(content, strconv.Atoi, ",")
+	crateSizes, _ := common.ParseDelimitedList(content, strconv.Atoi, ",")
 
 	maxSize := slices.Max(crateSizes)
 
@@ -78,7 +78,7 @@ func part2(context common.Context) int {
 	}
 
 	// Logic below
-	crateSizes, _ := common.ParseDelimtedList(content, strconv.Atoi, ",")
+	crateSizes, _ := common.ParseDelimitedList(content, strconv.Atoi, ",")
 	slices.Sort(crateSizes)
 
 	crateSizesUnique, _ := common.FindUniqueValuesInIntegerArray(crateSizes)
@@ -106,7 +106,7 @@ func part3(context common.Context) int {
 	}
 
 	// Logic below
-	crateSizes, _ := common.ParseDelimtedList(content, strconv.Atoi, ",")
+	crateSizes, _ := common.ParseDelimitedList(content, strconv.Atoi, ",")
 	slices.Sort(crateSizes)
 	slices.Reverse(crateSizes)
 
