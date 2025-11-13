@@ -34,3 +34,6 @@ go.work.sum
 # Everybody Codes rules
 *input.txt
 *input*.txt
+
+visualisations/rune.png
+visualisations/nail_connections.json

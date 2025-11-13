@@ -1,7 +1,9 @@
 package quest08
 
 import (
+	"encoding/json"
 	"fmt"
+	"os"
 	"strconv"
 	"time"
 
@@ -204,6 +206,16 @@ func part3(context common.Context) int {
 	}
 	// Logic below
 	_, nailThreadConnections := getKnotCount(content, numNails)
+
+	saveOutMap := make(map[string]map[string]int, len(nailThreadConnections))
+
+	for k, v := range nailThreadConnections {
+		saveOutMap[strconv.Itoa(k)] = common.MakeIntMapJSONSerialisable(v)
+	}
+
+	jsonData, _ := json.Marshal(saveOutMap)
+	os.WriteFile("visualisations/nail_connections.json", jsonData, 0644)
+
 	maxThreadsCut := 0
 	for n := 1; n < numNails; n++ {
 		for o := 1; o < numNails; o++ {
