@@ -60,3 +60,13 @@ func RemoveValFromIntegerArray(a []int, target int) ([]int, error) {
     }
 	return a, nil
 }
+
+func GetAllUniquePairs(a, b []int) [][2]int {
+	out := [][2]int{}
+	for _, i := range a {
+		for _, j := range b {
+			out = append(out, [2]int{i, j})
+		}
+	}
+	return out
+}

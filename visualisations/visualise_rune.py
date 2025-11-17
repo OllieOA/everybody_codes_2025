@@ -19,7 +19,7 @@ def main():
 
     num_points = len(new_dict)
 
-    dim = 800
+    dim = 8000
     img = np.zeros((dim, dim, 3), dtype=np.uint8)
 
     radius = int(dim*0.49)
