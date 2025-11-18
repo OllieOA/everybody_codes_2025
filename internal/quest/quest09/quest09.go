@@ -84,7 +84,7 @@ func getAllDucks(duckMap map[int]string) []int {
 	return ducks
 }
 
-func getAllParents(duckMap map[int]string, ducks []int) map[int]Pair {
+func getAllDucksToParents(duckMap map[int]string, ducks []int) map[int]Pair {
 	allCombos := common.GetAllUniquePairs(ducks, ducks)
 
 	allPairs := []Pair{}
@@ -137,12 +137,12 @@ func part2(context common.Context) int {
 	// Logic below
 	duckMap := parseInput(content)
 	ducks := getAllDucks(duckMap)
-	allParents := getAllParents(duckMap, ducks)
+	allDucksToParents := getAllDucksToParents(duckMap, ducks)
 
 	simScore := 0
 	for _, duck := range ducks {
 		
-		parents, ok := allParents[duck]
+		parents, ok := allDucksToParents[duck]
 		if !ok {
 			continue
 		}
@@ -152,6 +152,29 @@ func part2(context common.Context) int {
 
 	}
 	return simScore
+}
+
+func getAllRelations(duck int, allParentsToDucks map[int][]int, allDucksToParents map[int]Pair,) []int {
+	allRelations := []int{}
+	parents, ok := allDucksToParents[duck]; if ok {
+		allRelations = append(allRelations, parents.Duck1)
+		allRelations = append(allRelations, parents.Duck2)
+		// While here, also find any siblings
+
+		for _, parent := range []int{parents.Duck1, parents.Duck2} {
+			allChildren, ok := allParentsToDucks[parent]; if ok {
+				allRelations = append(allRelations, allChildren...)
+			}
+		}
+	}
+
+	children, ok := allParentsToDucks[duck]; if ok {
+		allRelations = append(allRelations, children...)
+	}
+
+	uniqueRelations, _ := common.FindUniqueValuesInIntegerArray(allRelations)
+	filteredRelations, _ := common.RemoveValFromIntegerArray(uniqueRelations, duck)
+	return filteredRelations
 }
 
 func part3(context common.Context) int {
@@ -165,13 +188,26 @@ func part3(context common.Context) int {
 	// Logic below
 	duckMap := parseInput(content)
 	ducks := getAllDucks(duckMap)
-	allParents := getAllParents(duckMap, ducks)
-	// TODO - this currently only cares about findings parents from children - 
-	// need to refactor this to find all siblings and children
+	allDucksToParents := getAllDucksToParents(duckMap, ducks)
+
+	allParentsToDucks := map[int][]int{}
+	for duck, parents := range allDucksToParents {
+		parent1 := parents.Duck1
+		parent2 := parents.Duck2
+
+		parents := []int{parent1, parent2}
+
+		for _, parent := range parents {
+			_, ok := allParentsToDucks[parent]; if !ok {
+				allParentsToDucks[parent] = []int{duck}
+			} else {
+				allParentsToDucks[parent] = append(allParentsToDucks[parent], duck)
+			}
+		}
+	}
 
 	allFamilies := map[int][]int{}
 	for _, baseDuck := range ducks {
-		fmt.Println("LOOKING FOR PARENTS OF", baseDuck)
 		alreadyFound := false
 		for _, family := range allFamilies {
 			if slices.Contains(family, baseDuck) {
@@ -188,9 +224,7 @@ func part3(context common.Context) int {
 		toExplore := []int{baseDuck}
 		processed := []int{}
 
-		iters := 0
 		for {
-			// fmt.Println("NEW LOOP, curr explore list is: ", toExplore)
 			if len(toExplore) == 0 {
 				break // found full family
 			}
@@ -199,28 +233,36 @@ func part3(context common.Context) int {
 				processed = append(processed, nextBaseDuck)
 			}
 			toExplore = toExplore[:len(toExplore)-1]
-			fmt.Println("Popped", nextBaseDuck, "from toExplore which is now", toExplore)
 
-			nextPair, duckHasParents := allParents[nextBaseDuck]
-			if !duckHasParents {
-				continue
+			relatedDucks := getAllRelations(nextBaseDuck, allParentsToDucks, allDucksToParents)
+
+			if len(relatedDucks) > 0 {
+				for _, relatedDuck := range relatedDucks {
+					if slices.Contains(processed, relatedDuck) {
+						continue
+					}
+					toExplore = append(toExplore, relatedDuck)
+				}
 			}
-			if nextPair.Duck1 == -1 {
-				continue
-			}
-			toExplore = append(toExplore, []int{nextPair.Duck1, nextPair.Duck2}...)
-			fmt.Println("Next up is", toExplore)
-			iters += 1
 		}
 		fullFamily := make([]int, len(processed))
 		copy(fullFamily, processed)
 		allFamilies[baseDuck] = fullFamily
-		fmt.Println(allFamilies)
-		
 	}
 
-	_ = content
-	return 0
+	maxLenFamily := 0
+	sumFamily := 0
+	for _, family := range allFamilies {
+		if len(family) > maxLenFamily {
+			maxLenFamily = len(family)
+			sumFamily = 0
+			for _, member := range family {
+				sumFamily += member
+			}
+		}
+	}
+
+	return sumFamily
 }
 
 // Finally, main runner function
