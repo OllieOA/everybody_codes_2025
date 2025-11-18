@@ -20,8 +20,9 @@ import (
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest07"
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest08"
 	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest09"
+
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest10"
-	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest11"
+	_ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest11"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest12"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest13"
 	// _ "github.com/OllieOA/everybody_codes_2025/internal/quest/quest14"
